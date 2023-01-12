@@ -45,9 +45,9 @@ quit_now = False
 def press(key):
     if key == 'q':
         quit_now = True
-
+print("1")
 listen_keyboard(on_press=press)
-
+print("2")
 # Loop over the main script by setting run to True and never changing it in the while loop
 run = True
 
