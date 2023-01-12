@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-import keyboard
-#from sshkeyboard import listen_keyboard
+from sshkeyboard import listen_keyboard
 
 # Define the GPIO pins based on board pin numbering
 r_led = 36
@@ -41,13 +40,13 @@ Ytime = None
 g_per = 20
 Gtime = None
 
-#
-#key_stroke = None
-#def press(key):
-#    if key == 'q':
-#        key_stroke = True
-#
-#listen_keyboard(on_press=press)
+quit_now = False
+
+def press(key):
+    if key == 'q':
+        quit_now = True
+
+listen_keyboard(on_press=press)
 
 # Loop over the main script by setting run to True and never changing it in the while loop
 run = True
@@ -56,8 +55,8 @@ while run == True:
     Ctime = time.perf_counter()         # Get a current timestamp
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
 
-#    if key_stroke == 'q':
-#        break
+    if quit_now == True:
+        break
 
     if pin_states == [0,0,0]:            # Define the initial condition handling
         GPIO.output(r_led, 1)            # Red on
