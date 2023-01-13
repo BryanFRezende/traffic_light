@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import asyncio
 from sshkeyboard import listen_keyboard, stop_listening
 
 # Define the GPIO pins based on board pin numbering
@@ -40,25 +41,26 @@ Ytime = None
 g_per = 20
 Gtime = None
 
-def press(key):
+# Loop over the main script by setting run to True and never changing it in the while loop
+run = True
+
+async def press(key):
     if key == "q":
+        global run
+        run = False
         print(f"{key}")
         stop_listening()
     else:
         print(f"{key}")
         stop_listening()
 
-# Loop over the main script by setting run to True and never changing it in the while loop
-run = True
+asyncio.run(listen_keyboard(on_press=press))
 
 while run == True:
     Ctime = time.perf_counter()         # Get a current timestamp
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
 
-    if listen_keyboard(on_press=press) == None:
-        break
-
-    elif pin_states == [0,0,0]:            # Define the initial condition handling
+    if pin_states == [0,0,0]:            # Define the initial condition handling
         GPIO.output(r_led, 1)            # Red on
         Rtime = time.perf_counter()     # Start red timer
         continue
