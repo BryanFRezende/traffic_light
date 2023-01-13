@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-import sshkeyboard
+from sshkeyboard import listen_keyboard, stop_listening
 
 # Define the GPIO pins based on board pin numbering
 r_led = 36
