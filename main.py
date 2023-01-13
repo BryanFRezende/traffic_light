@@ -46,7 +46,7 @@ def press(key):
     if key == 'q':
         quit_now = True
 print("1")
-listen_keyboard(on_press=press)
+
 print("2")
 # Loop over the main script by setting run to True and never changing it in the while loop
 run = True
@@ -54,6 +54,9 @@ run = True
 while run == True:
     Ctime = time.perf_counter()         # Get a current timestamp
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
+
+    listen_keyboard(on_press=press)
+    stop_listening()
 
     if quit_now == True:
         break
