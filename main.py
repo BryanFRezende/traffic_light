@@ -57,9 +57,9 @@ while run == True:
     Ctime = time.perf_counter()         # Get a current timestamp
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
     
-    print("1")
+    print("1", quit_now)
     listen_keyboard(on_press=press)
-    print("2")
+    print("2", quit_now)
 
     if quit_now == True:
         break
