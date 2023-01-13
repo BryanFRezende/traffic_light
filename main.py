@@ -44,10 +44,13 @@ quit_now = False
 
 def press(key):
     if key == 'q':
+        print(f{key})
         quit_now = True
         stop_listening()
+        return quit_now
     else:
         stop_listening()
+        break
     stop_listening()
 
 # Loop over the main script by setting run to True and never changing it in the while loop
@@ -58,7 +61,7 @@ while run == True:
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
     
     print("1", quit_now)
-    listen_keyboard(on_press=press)
+    quit_now = listen_keyboard(on_press=press)
     print("2", quit_now)
 
     if quit_now == True:
