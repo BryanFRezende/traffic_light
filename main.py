@@ -40,14 +40,13 @@ Ytime = None
 g_per = 20
 Gtime = None
 
-quit_now = 0
-
 def press(key):
     if key == "q":
         print(f"{key}")
-        counter = 1
         stop_listening()
-        return counter
+    else:
+        print(f"{key}")
+        stop_listening()
 
 # Loop over the main script by setting run to True and never changing it in the while loop
 run = True
@@ -55,15 +54,11 @@ run = True
 while run == True:
     Ctime = time.perf_counter()         # Get a current timestamp
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
-    
-    print("1", quit_now)
-    quit_now += listen_keyboard(on_press=press)
-    print("2", quit_now)
 
-    if quit_now == True:
+    if listen_keyboard(on_press=press) == None:
         break
 
-    if pin_states == [0,0,0]:            # Define the initial condition handling
+    elif pin_states == [0,0,0]:            # Define the initial condition handling
         GPIO.output(r_led, 1)            # Red on
         Rtime = time.perf_counter()     # Start red timer
         continue
@@ -74,7 +69,7 @@ while run == True:
             GPIO.output(g_led, 1)        # Green on
             Gtime = time.perf_counter() # Start green timer
             continue
-        else:                           # If not, break
+        else:                           # If not, continue
             continue
 
     elif pin_states == [0,1,0]:          # Define yellow handling
@@ -83,7 +78,7 @@ while run == True:
             GPIO.output(r_led, 1)        # Red on
             Rtime = time.perf_counter() # Start red timer
             continue
-        else:                           # If not, break
+        else:                           # If not, continue
             continue
 
     elif pin_states == [0,0,1]:          # Define green handling
@@ -92,7 +87,7 @@ while run == True:
             GPIO.output(y_led, 1)        # Yellow on
             Ytime = time.perf_counter() # Start yellow timer
             continue
-        else:                           # If not, break
+        else:                           # If not, continue
             continue
 
 GPIO.output([r_led, y_led, g_led], 0)
