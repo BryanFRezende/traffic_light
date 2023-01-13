@@ -57,6 +57,7 @@ while run == True:
         GPIO.output(y_led, 0)               # Yellow off
     except KeyboardInterrupt:
         # Turn off the LEDs and cleanup the gpio pins
+        run == False
         GPIO.output([r_led, y_led, g_led], 0)
         GPIO.cleanup()
         print('Lights off!')
