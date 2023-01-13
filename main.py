@@ -43,13 +43,15 @@ Gtime = None
 quit_now = False
 
 def press(key):
-    if key == 'q':
-        print(f"'{key}'")
+    if key == "q":
+        print(f"{key}")
         quit_now = True
         stop_listening()
         return quit_now
     else:
+        quit_now = False
         stop_listening()
+        return quit_now
     stop_listening()
 
 # Loop over the main script by setting run to True and never changing it in the while loop
