@@ -44,7 +44,7 @@ Gtime = None
 # Define run variable to run While set to True
 run = True
 
-# Define function to change run variable to false when the 'q' key is pressed
+# Define asynchronous function to change run variable to false when the 'q' key is pressed
 async def press(key):
     if key == "q":
         global run
@@ -55,9 +55,11 @@ async def press(key):
         print(f"{key}")
         stop_listening()
 
+# Define asynchronous function to capture key press (based on sshkeyboard python library: https://sshkeyboard.readthedocs.io/en/latest/reference.html#sshkeyboard.stop_listening)
 async def key_check():
     listen_keyboard(on_press=press)
 
+# Define the main loop controlling the traffic signal LEDs
 async def main():
     task = asyncio.create_task(key_check())
     while run == True:
@@ -96,19 +98,10 @@ async def main():
             else:                           # If not, continue
                 continue
 
+# Asynchronously run the loop
 asyncio.run(main())
 
+# Turn off the LEDs and cleanup the gpio pins
 GPIO.output([r_led, y_led, g_led], 0)
 GPIO.cleanup()
 print('Lights off!')
-
-    # Version 1.0
-    #GPIO.output(r_led, 1)               # Turn on the red light
-    #time.sleep(r_per)                   # Wait for the red light period to elapse
-    #GPIO.output(r_led, 0)               # Red light off
-    #GPIO.output(g_led, 1)               # Green light on
-    #time.sleep(g_per)                   # Wait green
-    #GPIO.output(g_led, 0)               # Green off
-    #GPIO.output(y_led, 1)               # Yellow on
-    #time.sleep(y_per)                   # Wait yellow
-    #GPIO.output(y_led, 0)               # Yellow off
