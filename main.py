@@ -40,12 +40,12 @@ Ytime = None
 g_per = 20
 Gtime = None
 
-quit_now = False
+quit_now = 0
 
 def press(key):
     if key == "q":
         print(f"{key}")
-        quit_now = True
+        quit_now += 1
         stop_listening()
         return quit_now
 
