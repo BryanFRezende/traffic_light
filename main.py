@@ -42,10 +42,10 @@ Gtime = None
 
 quit_now = 0
 
-def press(key, counter):
+def press(key):
     if key == "q":
         print(f"{key}")
-        counter += 1
+        counter = 1
         stop_listening()
         return counter
 
@@ -57,7 +57,7 @@ while run == True:
     pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
     
     print("1", quit_now)
-    quit_now = listen_keyboard(on_press=press)
+    quit_now += listen_keyboard(on_press=press)
     print("2", quit_now)
 
     if quit_now == True:
