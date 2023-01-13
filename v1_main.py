@@ -61,3 +61,5 @@ while run == True:
         GPIO.output([r_led, y_led, g_led], 0)
         GPIO.cleanup()
         print('Lights off!')
+    except RuntimeError:
+        print("")
