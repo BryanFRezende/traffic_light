@@ -45,9 +45,10 @@ quit_now = False
 def press(key):
     if key == 'q':
         quit_now = True
+        stop_listening()
     else:
-        stop_listening
-    stop_listening
+        stop_listening()
+    stop_listening()
 
 # Loop over the main script by setting run to True and never changing it in the while loop
 run = True
