@@ -41,9 +41,10 @@ Ytime = None
 g_per = 20
 Gtime = None
 
-# Loop over the main script by setting run to True and never changing it in the while loop
+# Define run variable to run While set to True
 run = True
 
+# Define function to change run variable to false when the 'q' key is pressed
 async def press(key):
     if key == "q":
         global run
@@ -54,43 +55,48 @@ async def press(key):
         print(f"{key}")
         stop_listening()
 
-asyncio.run(listen_keyboard(on_press=press))
+async def key_check():
+    listen_keyboard(on_press=press)
 
-while run == True:
-    Ctime = time.perf_counter()         # Get a current timestamp
-    pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
+async def main():
+    task = asyncio.create_task(key_check())
+    while run == True:
+        Ctime = time.perf_counter()         # Get a current timestamp
+        pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
 
-    if pin_states == [0,0,0]:            # Define the initial condition handling
-        GPIO.output(r_led, 1)            # Red on
-        Rtime = time.perf_counter()     # Start red timer
-        continue
-
-    elif pin_states == [1,0,0]:          # Define red handling
-        if Ctime - Rtime >= r_per:      # Check if red period has elapsed
-            GPIO.output(r_led, 0)       # If so, red off
-            GPIO.output(g_led, 1)        # Green on
-            Gtime = time.perf_counter() # Start green timer
-            continue
-        else:                           # If not, continue
+        if pin_states == [0,0,0]:            # Define the initial condition handling
+            GPIO.output(r_led, 1)            # Red on
+            Rtime = time.perf_counter()     # Start red timer
             continue
 
-    elif pin_states == [0,1,0]:          # Define yellow handling
-        if Ctime - Ytime >= y_per:      # Check yellow period elapse
-            GPIO.output(y_led, 0)       # If so, yellow off
-            GPIO.output(r_led, 1)        # Red on
-            Rtime = time.perf_counter() # Start red timer
-            continue
-        else:                           # If not, continue
-            continue
+        elif pin_states == [1,0,0]:          # Define red handling
+            if Ctime - Rtime >= r_per:      # Check if red period has elapsed
+                GPIO.output(r_led, 0)       # If so, red off
+                GPIO.output(g_led, 1)        # Green on
+                Gtime = time.perf_counter() # Start green timer
+                continue
+            else:                           # If not, continue
+                continue
 
-    elif pin_states == [0,0,1]:          # Define green handling
-        if Ctime - Gtime >= g_per:      # Check green period elapse
-            GPIO.output(g_led, 0)       # If so, green off
-            GPIO.output(y_led, 1)        # Yellow on
-            Ytime = time.perf_counter() # Start yellow timer
-            continue
-        else:                           # If not, continue
-            continue
+        elif pin_states == [0,1,0]:          # Define yellow handling
+            if Ctime - Ytime >= y_per:      # Check yellow period elapse
+                GPIO.output(y_led, 0)       # If so, yellow off
+                GPIO.output(r_led, 1)        # Red on
+                Rtime = time.perf_counter() # Start red timer
+                continue
+            else:                           # If not, continue
+                continue
+
+        elif pin_states == [0,0,1]:          # Define green handling
+            if Ctime - Gtime >= g_per:      # Check green period elapse
+                GPIO.output(g_led, 0)       # If so, green off
+                GPIO.output(y_led, 1)        # Yellow on
+                Ytime = time.perf_counter() # Start yellow timer
+                continue
+            else:                           # If not, continue
+                continue
+
+asyncio.run(main())
 
 GPIO.output([r_led, y_led, g_led], 0)
 GPIO.cleanup()
