@@ -61,8 +61,7 @@ async def key_check():
 
 # Define the main loop controlling the traffic signal LEDs
 def main():
-    global run
-    nonlocal Rtime, Ytime, Gtime
+    global run, Rtime, Ytime, Gtime
     while run == True:
         Ctime = time.perf_counter()         # Get a current timestamp
         pin_states = [GPIO.input(r_led), GPIO.input(y_led), GPIO.input(g_led)]      # Get a list of pin states
